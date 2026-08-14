@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { COLORES, SOMBRAS, TIPO_COLORES, TIPO_ETIQUETA } from '@/constants';
@@ -8,9 +9,10 @@ import { PortadaSimulada } from './PortadaSimulada';
 interface Props {
   item: Item;
   onPress: () => void;
+  trailing?: ReactNode;
 }
 
-export function ItemCard({ item, onPress }: Props) {
+export function ItemCard({ item, onPress, trailing }: Props) {
   return (
     <Pressable
       onPress={onPress}
@@ -31,6 +33,7 @@ export function ItemCard({ item, onPress }: Props) {
           <Text style={styles.puntuacionTexto}>{item.puntuacion.toFixed(1)}</Text>
         </View>
       </View>
+      {trailing}
       <Ionicons name="chevron-forward" size={22} color={COLORES.textoSecundario} />
     </Pressable>
   );

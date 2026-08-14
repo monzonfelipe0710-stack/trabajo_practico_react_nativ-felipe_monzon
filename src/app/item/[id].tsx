@@ -9,18 +9,22 @@ import { EstadoCarga } from '@/components/EstadoCarga';
 import { EstadoError } from '@/components/EstadoError';
 import { COLORES, SOMBRAS, TIPO_COLORES, TIPO_ETIQUETA, oscurecerColor } from '@/constants';
 import { obtenerItem } from '@/services/catalogo';
+import { agregarDeseo, estaEnDeseos, quitarDeseo } from '@/services/deseos';
 import type { EstadoDatos, Item } from '@/types';
 
 export default function PantallaDetalle() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const [estado, setEstado] = useState<EstadoDatos<Item>>({ estado: 'cargando' });
+  const [enDeseos, setEnDeseos] = useState(false);
 
   const cargar = useCallback(async () => {
     setEstado({ estado: 'cargando' });
     try {
       const item = await obtenerItem(id);
       setEstado({ estado: 'exito', datos: item });
+      const presente = await estaEnDeseos(item.id).catch(() => false);
+      setEnDeseos(presente);
     } catch {
       setEstado({ estado: 'error', mensaje: 'No se pudo encontrar el item.' });
     }
@@ -31,6 +35,17 @@ export default function PantallaDetalle() {
       cargar();
     }, [cargar])
   );
+
+  const alternarDeseo = async (item: Item) => {
+    const presente = await estaEnDeseos(item.id).catch(() => false);
+    if (presente) {
+      await quitarDeseo(item.id);
+      setEnDeseos(false);
+    } else {
+      await agregarDeseo(item.id);
+      setEnDeseos(true);
+    }
+  };
 
   if (estado.estado === 'cargando') {
     return (
@@ -113,6 +128,23 @@ export default function PantallaDetalle() {
               <Text style={styles.detalleTexto}>{item.plataforma}</Text>
             </View>
           </View>
+
+          <Pressable
+            onPress={() => alternarDeseo(item)}
+            style={({ pressed }) => [
+              styles.botonDeseo,
+              enDeseos && styles.botonDeseoActivo,
+              pressed && styles.botonDeseoPresionado,
+            ]}>
+            <Ionicons
+              name={enDeseos ? 'heart' : 'heart-outline'}
+              size={20}
+              color={enDeseos ? '#FFFFFF' : COLORES.error}
+            />
+            <Text style={[styles.botonDeseoTexto, enDeseos && styles.botonDeseoTextoActivo]}>
+              {enDeseos ? 'Quitar de la lista de deseos' : 'Agregar a la lista de deseos'}
+            </Text>
+          </Pressable>
 
           <Pressable
             onPress={() =>
@@ -273,5 +305,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: COLORES.primario,
+  },
+  botonDeseo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORES.tarjeta,
+    borderWidth: 1.5,
+    borderColor: COLORES.error,
+    borderRadius: 14,
+    paddingVertical: 14,
+  },
+  botonDeseoActivo: {
+    backgroundColor: COLORES.error,
+  },
+  botonDeseoPresionado: {
+    opacity: 0.85,
+  },
+  botonDeseoTexto: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORES.error,
+  },
+  botonDeseoTextoActivo: {
+    color: '#FFFFFF',
   },
 });
