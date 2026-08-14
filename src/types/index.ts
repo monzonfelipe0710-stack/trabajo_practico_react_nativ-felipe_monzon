@@ -12,3 +12,8 @@ export interface Item {
   emoji: string;
   color: string;
 }
+
+export type EstadoDatos<T> =
+  | { estado: 'cargando' }
+  | { estado: 'error'; mensaje: string }
+  | { estado: 'exito'; datos: T };

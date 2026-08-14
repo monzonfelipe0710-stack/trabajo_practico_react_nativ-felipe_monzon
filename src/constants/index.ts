@@ -20,15 +20,17 @@ export const TIPO_ETIQUETA: Record<TipoItem, string> = {
 };
 
 export const COLORES = {
-  primario: '#6C5CE7',
-  primarioOscuro: '#5A4BD1',
-  fondo: '#F7F8FC',
+  primario: '#7C5CFC',
+  primarioOscuro: '#5B3FD4',
+  primarioClaro: '#EDE9FE',
+  fondo: '#F4F5FB',
   tarjeta: '#FFFFFF',
   texto: '#1E2430',
   textoSecundario: '#6B7280',
   error: '#EF4444',
   exito: '#10B981',
-  borde: '#E5E7EB',
+  borde: '#EAECF3',
+  estrella: '#F59E0B',
 };
 
 export const TIPO_COLORES: Record<TipoItem, string> = {
@@ -36,3 +38,29 @@ export const TIPO_COLORES: Record<TipoItem, string> = {
   serie: '#3498DB',
   juego: '#E67E22',
 };
+
+export const SOMBRAS = {
+  tarjeta: {
+    shadowColor: '#1E2430',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  flotante: {
+    shadowColor: COLORES.primario,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+};
+
+export function oscurecerColor(hex: string, cantidad: number): string {
+  const limpio = hex.replace('#', '');
+  const numero = parseInt(limpio, 16);
+  const r = Math.max(0, Math.round(((numero >> 16) & 0xff) * (1 - cantidad)));
+  const g = Math.max(0, Math.round(((numero >> 8) & 0xff) * (1 - cantidad)));
+  const b = Math.max(0, Math.round((numero & 0xff) * (1 - cantidad)));
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
+}
