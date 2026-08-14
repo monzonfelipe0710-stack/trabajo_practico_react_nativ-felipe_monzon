@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -26,9 +26,11 @@ export default function PantallaDetalle() {
     }
   }, [id]);
 
-  useEffect(() => {
-    cargar();
-  }, [cargar]);
+  useFocusEffect(
+    useCallback(() => {
+      cargar();
+    }, [cargar])
+  );
 
   if (estado.estado === 'cargando') {
     return (
@@ -111,6 +113,15 @@ export default function PantallaDetalle() {
               <Text style={styles.detalleTexto}>{item.plataforma}</Text>
             </View>
           </View>
+
+          <Pressable
+            onPress={() =>
+              router.push({ pathname: '/item/[id]/editar', params: { id: item.id } })
+            }
+            style={({ pressed }) => [styles.botonEditar, pressed && styles.botonEditarPresionado]}>
+            <Ionicons name="create-outline" size={20} color={COLORES.primario} />
+            <Text style={styles.botonEditarTexto}>Editar item</Text>
+          </Pressable>
         </View>
       </ScrollView>
     </>
@@ -243,5 +254,24 @@ const styles = StyleSheet.create({
   detalleTexto: {
     fontSize: 14,
     color: COLORES.textoSecundario,
+  },
+  botonEditar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORES.tarjeta,
+    borderWidth: 1.5,
+    borderColor: COLORES.primario,
+    borderRadius: 14,
+    paddingVertical: 14,
+  },
+  botonEditarPresionado: {
+    backgroundColor: COLORES.primarioClaro,
+  },
+  botonEditarTexto: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORES.primario,
   },
 });
