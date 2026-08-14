@@ -109,7 +109,7 @@ Navegación: 2 pestañas (Inicio, Lista de deseos) + stack (Detalle, Nuevo item,
 - [ ] Se puede quitar un item de la lista.
 
 ### CA-05 — Alta (P4)
-- [ ] Campos con validación: título (requerido), tipo (selección requerida), género (requerido), año (número entre 1900 y 2026), descripción (mínimo 10 caracteres), puntuación (0 a 10).
+- [ ] Campos con validación: título (requerido), tipo (selección requerida), género (requerido), año (número entre 1900 y 2026), descripción (mínimo 10 caracteres), puntuación (0 a 10), plataforma (requerida, mínimo 2 caracteres).
 - [ ] Los errores se muestran por campo y el formulario no envía si hay errores.
 - [ ] Al guardar, el item aparece en el listado del catálogo (mock).
 

@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { EstadoCarga } from '@/components/EstadoCarga';
@@ -102,6 +102,14 @@ export default function PantallaInicio() {
             />
           ))}
       </View>
+
+      <Pressable
+        onPress={() => router.push('/item/nuevo')}
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPresionado]}>
+        <LinearGradient colors={['#8B5CF6', '#6D28D9']} style={styles.fabGradiente}>
+          <Ionicons name="add" size={30} color="#FFFFFF" />
+        </LinearGradient>
+      </Pressable>
     </>
   );
 }
@@ -141,5 +149,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 100,
     gap: 12,
+  },
+  fab: {
+    position: 'absolute',
+    right: 20,
+    bottom: 24,
+    borderRadius: 30,
+  },
+  fabPresionado: {
+    transform: [{ scale: 0.95 }],
+  },
+  fabGradiente: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

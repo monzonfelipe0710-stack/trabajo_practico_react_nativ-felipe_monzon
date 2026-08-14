@@ -39,6 +39,12 @@ export const TIPO_COLORES: Record<TipoItem, string> = {
   juego: '#E67E22',
 };
 
+export const EMOJIS_POR_TIPO: Record<TipoItem, string> = {
+  pelicula: '🎬',
+  serie: '📺',
+  juego: '🎮',
+};
+
 export const SOMBRAS = {
   tarjeta: {
     shadowColor: '#1E2430',
